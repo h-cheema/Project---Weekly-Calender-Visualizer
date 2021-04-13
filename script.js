@@ -1,7 +1,7 @@
 let globals = {
     form: { // Form values.
         dateStart: "1996-03-08",
-        numberOfYears: 1,
+        numberOfYears: 80,
         dateToday: getCurrentDate(),
     },
     visualizer: {
@@ -33,7 +33,6 @@ $(document).ready(function() {
 });
 
 function initApp() {
-
     assignDefaultFormValues()
     processVisualizer();
 }
@@ -75,8 +74,22 @@ function renderVisualizer(visualizerValuesValid) {
     let cellInnerText = "";
 
     let vHeader = document.getElementById('v-header');
-    let vCells = document.getElementById('v-cells');
-    vCells.innerText = cellInnerText;
+
+    let vCells = {
+        start: document.getElementById('v-cells-dateStart'),
+        today: document.getElementById('v-cells-dateToday'),
+        end: document.getElementById('v-cells-dateEnd'),
+    }
+
+    // Interval colors.
+    vCells.start.style.color = "grey";
+    vCells.today.style.color = "orange";
+    vCells.end.style.color = "green";
+
+    vCells.start.innerText = cellInnerText;
+    vCells.today.innerText = cellInnerText;
+    vCells.end.innerText = cellInnerText;
+
 
     if (visualizerValuesValid) {
         // Render the visualizer.
@@ -90,6 +103,22 @@ function renderVisualizer(visualizerValuesValid) {
         // Reset the visualizer and display message.
         vHeader.innerText = "Please pick a valid date range.";
     }
+
+
+    // if (visualizerValuesValid) {
+    //     // Render the visualizer.
+    //     for (let i = 0; i < weeks; i++) {
+    //         cellInnerText = cellInnerText + cellText;
+    //     }
+    //     vCells.innerText = cellInnerText;
+    //     vHeader.innerText = (
+    //         Math.round(weeks/52) + " years (" + weeks + " weeks)"); // round 2 dec
+    // } else {
+    //     // Reset the visualizer and display message.
+    //     vHeader.innerText = "Please pick a valid date range.";
+    // }
+
+
 
 }
 
@@ -116,10 +145,6 @@ function calculateDates() {
     globals.visualizer.days = Math.round(days);
     globals.visualizer.weeks = Math.round(days / 7);
     globals.visualizer.years = Math.round(days / 365);
-
-    // console.log("globals.visualizer.days: " + globals.visualizer.days);
-    // console.log("globals.visualizer.weeks: " + globals.visualizer.weeks);
-    // console.log("globals.visualizer.years: " + globals.visualizer.years);
 
 }
 
