@@ -1,45 +1,47 @@
+let globals = {
+    // Form values.
+    form: {
+        dateStartVal: null,
+        dateTodayVal: null,
+        numberOfYearsVal: null,
+    }
+};
+
 $(document).ready(function() {
 
-    // // Get form input.
-    // let dateStart = document.getElementById("dateStart");
-    // let numberOfYears = document.getElementById("numberOfYears");
-    // let dateToday = document.getElementById("dateToday");
 
-    // // Form values.
-    // let dateStartVal;
-    // let numberOfYearsVal;
-    // let dateTodayVal;
+    let inputForm = document.getElementById("inputForm");
+    inputForm.addEventListener('input', (e) => {
 
-    // // Form input listeners.
-    // dateStart.addEventListener('input', () => {
-    //     dateStartVal = dateStart.value;
-    //     console.log(dateStartVal);
-    //     checkNulls(dateStartVal, numberOfYearsVal, dateTodayVal);
-    // });
-    // numberOfYears.addEventListener('input', () => {
-    //     numberOfYearsVal = numberOfYears.value;
-    //     console.log(numberOfYearsVal);
-    //     checkNulls(dateStartVal, numberOfYearsVal, dateTodayVal);
-    // });
-    // dateToday.addEventListener('input', () => {
-    //     dateTodayVal = dateToday.value;
-    //     console.log(dateTodayVal);
-    //     checkNulls(dateStartVal, numberOfYearsVal, dateTodayVal);
-    // });
+        // Assign globals.form values when changed.
+        const targetId = e.target.id; // Get id string
 
-    // // Calculate weeks if form valid.
-    // if(nn(dateStartVal) && nn(numberOfYearsVal) && nn(dateTodayVal)) {
-    //     calculateWeeks(dateStartVal, dateTodayVal)
-    // }
+        // Use id string to set globals.form value
+        globals.form[targetId] = targetId;
+        
+        // If forms values are valid, calculate weeks.
+        if (isFormValid()) {
+
+            console.log("form is valid.");
+
+            // Loop through globals.form values
+            const formLength = getObjectLength(globals.form);
+            for (let i = 0; i < formLength; i++) {
+                let element = globals.form[i];
+                console.log("element:" + element);
+            }
+
+            // Calculate weeks if form valid.
+        }
+
+        console.log("input changed." + e.target);
+    });
 
 
-    renderVisualizer();
-
+    // renderVisualizer();
 
 });
 
-
-/**  */
 function renderVisualizer() {
 
     let weeks = 100;
@@ -52,7 +54,25 @@ function renderVisualizer() {
     }
 
     vHeader.innerText = weeks + " weeks";
+
+    // calculateWeeks(globals.form.dateStartVal, globals.form.dateTodayVal)
+
+    console.log("visualizer rendered.");
     
+}
+
+function isFormValid() {
+
+    // const formLength = getObjectLength(globals.form);
+    // for (let i = 0; i < formLength; i++) {        
+    // }
+
+    if(nn(globals.form.dateStartVal) 
+    && nn(globals.form.numberOfYearsVal) 
+    && nn(globals.form.dateTodayVal)) {
+        return true;
+    }
+    return false;
 }
 
 
@@ -63,9 +83,14 @@ function calculateWeeks(date1, date2) {
     // console.log(date1);
 }
 
+function getObjectLength(obj) {
+    const formLength = Object.keys(obj).length
+}
 
 /** not null */
 function nn(val) {
-    if(val == null){return false;} 
+    if(val == null){
+        return false;
+    } 
     return true;
 }
