@@ -1,8 +1,4 @@
-html {
-    margin: 0 auto;
-    width: 90%;
-}
-
 #v-cells {
     font-size: 30px;
+    word-wrap: break-word;
 }

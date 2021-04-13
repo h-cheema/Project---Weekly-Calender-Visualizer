@@ -1,39 +1,71 @@
-$( document ).ready(function() {
+$(document).ready(function() {
+
+    // // Get form input.
+    // let dateStart = document.getElementById("dateStart");
+    // let numberOfYears = document.getElementById("numberOfYears");
+    // let dateToday = document.getElementById("dateToday");
+
+    // // Form values.
+    // let dateStartVal;
+    // let numberOfYearsVal;
+    // let dateTodayVal;
+
+    // // Form input listeners.
+    // dateStart.addEventListener('input', () => {
+    //     dateStartVal = dateStart.value;
+    //     console.log(dateStartVal);
+    //     checkNulls(dateStartVal, numberOfYearsVal, dateTodayVal);
+    // });
+    // numberOfYears.addEventListener('input', () => {
+    //     numberOfYearsVal = numberOfYears.value;
+    //     console.log(numberOfYearsVal);
+    //     checkNulls(dateStartVal, numberOfYearsVal, dateTodayVal);
+    // });
+    // dateToday.addEventListener('input', () => {
+    //     dateTodayVal = dateToday.value;
+    //     console.log(dateTodayVal);
+    //     checkNulls(dateStartVal, numberOfYearsVal, dateTodayVal);
+    // });
+
+    // // Calculate weeks if form valid.
+    // if(nn(dateStartVal) && nn(numberOfYearsVal) && nn(dateTodayVal)) {
+    //     calculateWeeks(dateStartVal, dateTodayVal)
+    // }
 
 
-    // Get form input
-    let dateStart = document.getElementById("dateStart");
-    let dateStartVal;
+    renderVisualizer();
 
-    let numberOfYears = document.getElementById("numberOfYears");
-    let numberOfYearsVal;
-
-    let dateToday = document.getElementById("dateToday");
-    let dateTodayVal;
-
-
-    dateStart.addEventListener('input', () => {
-        console.log(dateStart.value);
-    });
-    numberOfYears.addEventListener('input', () => {
-        console.log(dateStart.value);
-    });
-    dateToday.addEventListener('input', () => {
-        console.log(dateStart.value);
-    });
-
-    if(nn(dateStartVal) || nn(numberOfYearsVal) || nn(dateTodayVal)){
-
-    }
-
-    // Calculate weeks
-    // let vHeader = document.getElementById("v-Header");
 
 });
 
-function nn(val) {
-    if(val != null){
-        return true;
+
+/**  */
+function renderVisualizer() {
+
+    let weeks = 100;
+    let cell = "O";
+    let vCells = document.getElementById('v-cells');
+    let vHeader = document.getElementById('v-header');
+
+    for (let i = 0; i < weeks; i++) {
+        vCells.innerText = vCells.innerText + cell;
     }
-    return false;
+
+    vHeader.innerText = weeks + " weeks";
+    
+}
+
+
+/** Calculate weeks */
+function calculateWeeks(date1, date2) {
+    // var time = date2.getTime() - date1.getTime();
+    // var weeks = time / (1000 * 3600 * 24 * 7);
+    // console.log(date1);
+}
+
+
+/** not null */
+function nn(val) {
+    if(val == null){return false;} 
+    return true;
 }
