@@ -1,18 +1,19 @@
 let globals = {
     form: { // Form values.
-        dateStart: "1990-01-01",
-        numberOfYears: 80,
+        dateStart: "1996-03-08",
+        numberOfYears: 1,
         dateToday: getCurrentDate(),
     },
     visualizer: {
         days: null,
         weeks: null,
+        years: null,
     },
 };
 
 $(document).ready(function() {
 
-    initFormValues();
+    initApp();
 
     let inputForm = document.getElementById("inputForm");
     inputForm.addEventListener('input', (e) => {
@@ -25,35 +26,26 @@ $(document).ready(function() {
 
         // If forms values are valid, calculate weeks.
         if (isFormValid()) {
-
-            // Calculate weeks if form valid.
-            // let date1 = new Date('March 8, 1996 01:00:00');
-            // let date2 = new Date('March 8, 2096 01:00:00');
-
-            let date1 = new Date (globals.form.dateStart);
-            let date2 = new Date (globals.form.dateToday);
-            
-            let valuesAreValid = false;
-            if (date1.getTime() < date2.getTime()) {
-                calculateDays(date1, date2);
-                valuesAreValid = true;
-            }
-            
-            renderVisualizer(valuesAreValid);
+            processVisualizer();
         }
+
     });
 });
 
-function initFormValues() {
+function initApp() {
+
+    assignDefaultFormValues()
+    processVisualizer();
+}
+
+/** Set initial form values to default values. */
+function assignDefaultFormValues() {
     document.getElementById("dateStart").value = globals.form.dateStart;
     document.getElementById("numberOfYears").value = globals.form.numberOfYears;
     document.getElementById("dateToday").value = globals.form.dateToday;
-
-
 }
 
 function isFormValid() {
-
     // Check object values for null/undefined.
     let formIsValid = true;
     let formLength = getObjectLength(globals.form);
@@ -65,16 +57,18 @@ function isFormValid() {
     }
 
     if (formIsValid) {
-        console.log("Form is valid.");
         return true;
     } else {
-        console.log("Form is not valid.");
         return false;
     }
 }
 
-// Renders when form values are valid.
-function renderVisualizer(valuesAreValid) {
+function processVisualizer() {
+    calculateDates();
+    renderVisualizer(true);
+}
+
+function renderVisualizer(visualizerValuesValid) {
 
     let weeks = globals.visualizer.weeks;
     let cellText = "O";
@@ -84,13 +78,14 @@ function renderVisualizer(valuesAreValid) {
     let vCells = document.getElementById('v-cells');
     vCells.innerText = cellInnerText;
 
-    if (valuesAreValid) {
+    if (visualizerValuesValid) {
         // Render the visualizer.
         for (let i = 0; i < weeks; i++) {
             cellInnerText = cellInnerText + cellText;
         }
         vCells.innerText = cellInnerText;
-        vHeader.innerText = weeks + " weeks (" + Math.round(weeks/52 * 100)/100 + " years)"; // round 2 dec
+        vHeader.innerText = (
+            Math.round(weeks/52) + " years (" + weeks + " weeks)"); // round 2 dec
     } else {
         // Reset the visualizer and display message.
         vHeader.innerText = "Please pick a valid date range.";
@@ -99,16 +94,33 @@ function renderVisualizer(valuesAreValid) {
 }
 
 /** Calculate weeks */
-function calculateDays(date1, date2) {
-    
-    var time = date2.getTime() - date1.getTime();
-    var days = time / (1000 * 3600 * 24);
+function calculateDates() {
 
-    globals.visualizer.days = Math.round(days); 
-    globals.visualizer.weeks = Math.round(days/7);
+    // start Date obj
+    let date1 = new Date(globals.form.dateStart);
+    console.log("dateStart: " + date1);
 
-    console.log("globals.visualizer.days: " + globals.visualizer.days);
-    console.log("globals.visualizer.weeks: " + globals.visualizer.weeks);
+    // years to Date obj
+    let yearsMs = globals.form.numberOfYears * (365 + 0.25) * 24 * 60 * 60 * 1000;
+    let date2 = new Date(yearsMs + date1.getTime()); // yearsMs + startDateMs
+    console.log("dateYears: " + date2);
+
+    // start Date ms + years Date ms
+    let dateTotalMs = date2.getTime() - date1.getTime();
+    console.log("dateTotalMs: " + dateTotalMs);
+
+    // Date obj to ms to days number
+    let days = new Date(dateTotalMs).getTime() / 1000 / 3600 / 24;
+    console.log("days: " + days);
+
+    globals.visualizer.days = Math.round(days);
+    globals.visualizer.weeks = Math.round(days / 7);
+    globals.visualizer.years = Math.round(days / 365);
+
+    // console.log("globals.visualizer.days: " + globals.visualizer.days);
+    // console.log("globals.visualizer.weeks: " + globals.visualizer.weeks);
+    // console.log("globals.visualizer.years: " + globals.visualizer.years);
+
 }
 
 function getCurrentDate() {
