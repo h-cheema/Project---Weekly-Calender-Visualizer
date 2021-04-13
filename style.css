@@ -3,21 +3,6 @@ html {
     width: 90%;
 }
 
-
-.vSpace {
-    margin-bottom: 40px;
-}
-
-
-.header {
-
-}
-
-
-.main {
-    
-}
-
-.weekCell {
+#v-cells {
     font-size: 30px;
 }

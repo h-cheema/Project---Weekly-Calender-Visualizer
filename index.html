@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Weekly Calender Visualizer</title>
 
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-    <script src="jquery-3.5.1.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script.js"></script>
 </head>
 <body>
 
+
     <!-- Page header -->
-    <h2 class="header text-center vSpace">Weekly Calender Visualizer</h2>
+    <h2 class="header text-center mb-5">Weekly Calender Visualizer</h2>
+
 
     <!-- Date inputs -->
-    <form class="row vSpace">
+    <form class="row mb-5">
         <div class="col">
-            <label class="">Start date</label><input class="form-control mb-3" type="date">
+            <label class="">Start date</label><input class="form-control mb-3" id="dateStart" name="dateStart" type="date">
         </div>
         <div class="col">
-            <label class="">End date</label><input class="form-control" type="date">
+            <label class="">Number of Years</label><input class="form-control" id="numberOfYears" name="numberOfYears" type="number" step="1">
         </div>
         <div class="col">
-            <label class="">Today's date</label><input class="form-control mb-3" type="date">
+            <label class="">Today's date</label><input class="form-control mb-3" id="dateToday" name="dateToday" type="date">
         </div>
     </form>
 
-    <!--  -->
-    <h2 class="">(Range)</h2>
-    <div class="main d-inline-flex flex-wrap border border-dark p-1 vSpace">
 
-        <div class="weekCell">O</div>
-
+    <!-- Visualizer -->
+    <h2 id="v-Header">(Range)</h2>
+    <div id="v-container" class="d-inline-flex flex-wrap border border-dark p-1 mb-5">
+        <div id="v-cells">O</div>
     </div>
     
+
 </body>
 </html>
