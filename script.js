@@ -1,7 +1,7 @@
 let globals = {
     form: { // Form values.
         dateStart: "1996-03-08",
-        numberOfYears: 20,
+        numberOfYears: 75,
         dateToday: getCurrentDate(),
     },
     visualizer: {
@@ -9,9 +9,9 @@ let globals = {
         weeks: null,
         years: null,
         intervals: [
-            {amount: 0, color: "blue"},
-            {amount: 1, color: "orange"}, // current day is always 1 day.
-            {amount: 0, color: "green"},
+            {amount: 0, color: "blue"}, // past
+            {amount: 1, color: "orange"}, // present week is always 1 week.
+            {amount: 0, color: "green"}, // future
         ],
     },
 };
@@ -89,23 +89,44 @@ function renderVisualizer(visualizerValuesValid) {
 
         // Cell container.
         let vContainer = document.getElementById('v-container');
+        vContainer.innerHTML = ''; // Delete all child nodes.
 
-        // Create and append nodes by interval.
+        let interval = 0;
+
+        // Iterate intervals.
         for (let i = 0; i < Object.values(globals.visualizer.intervals).length; i++) {
 
-            // Regular cells
             let amount = Object.values(globals.visualizer.intervals)[i].amount;
             let color = Object.values(globals.visualizer.intervals)[i].color;
             
-            // Render the visualizer.
-            for (let i = 0; i < amount; i++) {
-                cellInnerText = cellInnerText + cellText;
+            // Create and append nodes.
+            for (let j = 0; j < amount; j++) {
+
+                /*  
+                    Weeks
+                    Age
+                    Date
+                */
+
+                // Title of node (node's date).
+                interval += 1;
+                let nodeDay = interval * 7;
+                let nodeWeek = convertDaysToMs(interval-1)*7;
+                let nodeDate = new Date(new Date(globals.form.dateStart).getTime() + nodeWeek).toISOString().slice(0,10);
+                let nodeYears = Math.ceil(interval / 365.25);
+
+                let title = 
+                    nodeDay + " days \n" 
+                    + interval + " weeks \n" 
+                    + nodeYears + " years \n" 
+                    + nodeDate;
+                
+                // Create node.
+                let cellNode = createCellNode(cellText, color, title); // create interval node.
+                
+                // Append node.
+                vContainer.appendChild(cellNode); // append interval node.
             }
-
-            let cellNode = createCellNode(cellInnerText, color); // create interval node.
-            vContainer.appendChild(cellNode); // append interval node.
-
-            cellInnerText = ""; // reset innerText for next iteration.
 
         }
 
@@ -131,11 +152,18 @@ function renderVisualizer(visualizerValuesValid) {
 
 }
 
-function createCellNode(cellString, color) {
+/**
+ * 
+ * @param {*The displayed string/char.} cellString 
+ * @param {*} color 
+ * @param {*The date the node represents.} title 
+ * @returns Built node.
+ */
+function createCellNode(cellString, color, title) {
     let node = document.createElement("div");
     node.style.color = color;
     node.innerText = cellString;
-
+    node.title = title;
     return node;
 }
 
@@ -143,14 +171,14 @@ function createCellNode(cellString, color) {
 function calculateDates() {
 
     // start Date obj
-    let date1 = new Date(globals.form.dateStart);
+    let dateStart = new Date(globals.form.dateStart);
 
     // years to Date obj
     let yearsMs = globals.form.numberOfYears * (365 + 0.25) * 24 * 60 * 60 * 1000;
-    let date2 = new Date(yearsMs + date1.getTime()); // yearsMs + startDateMs
+    let dateEnd = new Date(yearsMs + dateStart.getTime()); // yearsMs + dateStartMs
 
     // start Date ms + years Date ms
-    let dateTotalMs = date2.getTime() - date1.getTime();
+    let dateTotalMs = dateEnd.getTime() - dateStart.getTime();
 
     // Date obj to ms to days number
     let days = new Date(dateTotalMs).getTime() / 1000 / 3600 / 24;
@@ -160,13 +188,25 @@ function calculateDates() {
     globals.visualizer.weeks = Math.round(days / 7);
     globals.visualizer.years = Math.round(days / 365);
 
-    // console.log("dateStart: " + date1);
-    // console.log("dateYears: " + date2);
+    // console.log("dateStart: " + dateStart);
+    // console.log("dateYears: " + dateEnd);
     // console.log("dateTotalMs: " + dateTotalMs);
     // console.log("days: " + days);
 
-    // Calculate 
 
+
+    // Calculate number of weeks per interval.
+    let dateToday = new Date(globals.form.dateToday);
+
+    // Today ms - start ms
+    let weeksPast = convertMsToDays(dateToday.getTime() - dateStart.getTime()) / 7;
+    globals.visualizer.intervals[0].amount = weeksPast;
+    console.log(weeksPast);
+
+    // End date ms - start date ms
+    let weeksFuture = convertMsToDays(dateEnd.getTime() - dateStart.getTime()) / 7;
+    globals.visualizer.intervals[2].amount = weeksFuture;
+    console.log(weeksFuture);
 
 }
 
@@ -175,17 +215,21 @@ function getCurrentDate() {
 }
 
 function convertMsToDays(ms) {
-    return ms / 1000 / 3600 / 24
+    return ms / 1000 / 3600 / 24;
+}
+
+function convertDaysToMs(day) {
+    return day * 1000 * 3600 * 24;
 }
 
 function getObjectLength(obj) {
-    const formLength = Object.keys(obj).length
+    const formLength = Object.keys(obj).length;
     return formLength;
 }
 
 /** not null */
 function nn(val) {
-    if(val == null){
+    if(val == null) {
         return false;
     } 
     return true;

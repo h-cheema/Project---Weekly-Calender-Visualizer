@@ -1,4 +1,11 @@
+#v-container {
+    display: inline-block;
+    font-size: 0.6em;
+    font-weight: 1000;
+
+}
+
 #v-cells {
-    font-size: 15px;
+    font-size: 12px;
     word-wrap: break-word;
 }
